@@ -4,17 +4,20 @@ import { userDatabaseStore } from "./store/database";
 
 import DashBoard from "./pages/Dashboard/DashBoard.vue";
 import Login from "./pages/Login/LoginView.vue";
-
+import ProfileView from "./pages/Profile/ProfileView.vue";
+import LoadingComponent from "./components/Loading/LoadingComponent.vue";
 const requireAuth = async (to, from, next) => {
   const userStore = useUserStore();
-  userStore.loadingSession = true;
-  const user = await userStore.currentUser();
-  if (user) {
-    next();
+  if (!userStore.userData && !userStore.loadingSession) {
+    const user = await userStore.currentUser();
+    if (user) {
+      next();
+    } else {
+      next("/login");
+    }
   } else {
-    next("/login");
+    next();
   }
-  userStore.loadingSession = false;
 };
 
 const redireccion = async (to, from, next) => {
@@ -39,8 +42,15 @@ const routes = [
     component: DashBoard,
     // beforeEnter: requireAuth,
     name: "dashboard",
+    beforeEnter: requireAuth,
   },
   { path: "/login", component: Login, name: "login" },
+  {
+    path: "/profile",
+    component: ProfileView,
+    name: "profile",
+    beforeEnter: requireAuth,
+  },
 ];
 
 const router = createRouter({

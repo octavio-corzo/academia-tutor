@@ -1,15 +1,22 @@
 <template>
   <a-layout class="layout">
-    <SlideBar></SlideBar>
+
     <a-layout>
-      <a-layout-header class="layout-header">
+      <!-- <SlideBar v-if="!userStore.loadingSession"></SlideBar> -->
+      <a-layout-header class="" v-if="!userStore.loadingSession">
         <div class="logo" />
-        <a-menu theme="dark" mode="horizontal" class="menu-horizontal">
+        <a-menu theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }" v-model:selectedKeys="selectedKeys">
+
+          <a-menu-item v-if="userStore.userData" key="perfil">
+            <router-link to="/Profile">Profile</router-link>
+          </a-menu-item>
+
         </a-menu>
       </a-layout-header>
-      <a-layout-content class="layout-content">
-        <div class="mt-10 container">
-          <router-view></router-view>
+      <a-layout-content class="mt-5" style="padding: 0 50px">
+        <div class="container">
+          <LoadingComponent v-if="userStore.loadingUser" />
+          <router-view v-else></router-view>
         </div>
       </a-layout-content>
       <a-layout-footer class="layout-footer">
@@ -20,29 +27,35 @@
 </template>
 
 <script setup>
+import { ref, watch } from "vue";
+import { useUserStore } from "../src/store/user";
+import { useRoute } from "vue-router";
+import LoadingComponent from "./components/Loading/LoadingComponent.vue";
 import SlideBar from './components/SlideBar/SlideBar.vue';
+
+
+const userStore = useUserStore();
+const route = useRoute();
+
+const selectedKeys = ref([]);
+
+// console.log(route.name);
+watch(
+  () => route.name,
+  () => {
+    selectedKeys.value = [route.name];
+  }
+);
 </script>
 
 <style>
-:root {
-  --color-footer-bg: #002d40;
-  /* Color de fondo del footer */
-  --color-content-bg: #f0f2f5;
-  /* Color de fondo del contenido */
-  --text-color: #fff;
-  /* Color del texto */
-}
-
-
 .container {
-  background-color: var(--color-content-bg);
+  background-color: #fff;
   padding: 24px;
   min-height: calc(100vh - 64px);
 }
 
-.layout-footer {
+.text-center {
   text-align: center;
-  background-color: var(--color-footer-bg);
-  color: var(--text-color);
 }
 </style>

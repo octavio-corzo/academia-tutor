@@ -2,9 +2,9 @@
     <a-layout-sider v-model:collapsed="collapsed" collapsible>
         <div class="logo" />
         <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
-            <a-menu-item style="" @click="navigateTo('/dashboard')" class="menu-item" key="1">
+            <!-- <a-menu-item style="" @click="navigateTo('/dashboard')" class="menu-item" key="1">
                 <LucideVueNext.LayoutDashboard />
-            </a-menu-item>
+            </a-menu-item> -->
             <!-- Agrega más a-menu-item aquí según sea necesario -->
         </a-menu>
     </a-layout-sider>
