@@ -6,6 +6,8 @@ import DashBoard from "./pages/Dashboard/DashBoard.vue";
 import Login from "./pages/Login/LoginView.vue";
 import ProfileView from "./pages/Profile/ProfileView.vue";
 import LoadingComponent from "./components/Loading/LoadingComponent.vue";
+import NotesView from "./pages/Notes/NotesView.vue";
+
 const requireAuth = async (to, from, next) => {
   const userStore = useUserStore();
   if (!userStore.userData && !userStore.loadingSession) {
@@ -49,6 +51,12 @@ const routes = [
     path: "/profile",
     component: ProfileView,
     name: "profile",
+    beforeEnter: requireAuth,
+  },
+  {
+    path: "/notes",
+    component: NotesView,
+    name: "notes",
     beforeEnter: requireAuth,
   },
 ];

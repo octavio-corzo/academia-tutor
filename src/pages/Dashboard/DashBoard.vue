@@ -32,11 +32,10 @@
             </a-card>
         </a-col>
         <a-col class="gutter-row" :span="6">
-            <a-card class="ml-3 mr-3 mb-3 mt-3" :bordered="false" hoverable @click="router.push('/login')">
+            <a-card class="ml-3 mr-3 mb-3 mt-3" :bordered="false" hoverable @click="router.push('/notes')">
                 <div style="text-align: center;">
-                    <LucideVueNext.Rss color="green" :size="75" />
-                    <a-typography-title :level="4" class="mt-2"
-                        style="text-align: center;">Novedades</a-typography-title>
+                    <LucideVueNext.Notebook color="green" :size="75" />
+                    <a-typography-title :level="4" class="mt-2" style="text-align: center;">Notas</a-typography-title>
                 </div>
 
             </a-card>

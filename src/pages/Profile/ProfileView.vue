@@ -1,5 +1,5 @@
 <template>
-    <h1 class="text-center">Perfil de usuario</h1>
+    <a-typography-title class="text-center">Perfil de usuario</a-typography-title>
     <div class="text-center mb-5">
         <a-avatar :src="userStore.userData.photoURL" :size="200"></a-avatar>
     </div>

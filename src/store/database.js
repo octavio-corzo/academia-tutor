@@ -22,25 +22,25 @@ export const userDatabaseStore = defineStore("database", {
     loading: false,
   }),
   actions: {
-    async getUrl(id) {
-      this.loadingDoc = true;
-      try {
-        const docRef = doc(db, "urls", id);
-        const docSnap = await getDoc(docRef);
+    // async getNote(id) {
+    //   this.loadingDoc = true;
+    //   try {
+    //     const docRef = doc(db, "note", id);
+    //     const docSnap = await getDoc(docRef);
 
-        if (!docSnap.exists()) {
-          return false;
-        }
+    //     if (!docSnap.exists()) {
+    //       return false;
+    //     }
 
-        return docSnap.data().name;
-      } catch (error) {
-        console.log(error.mesaage);
-        return false;
-      } finally {
-        this.loadingDoc = false;
-      }
-    },
-    async getUrls() {
+    //     return docSnap.data().name;
+    //   } catch (error) {
+    //     console.log(error.mesaage);
+    //     return false;
+    //   } finally {
+    //     this.loadingDoc = false;
+    //   }
+    // },
+    async getNotes() {
       if (this.documents.length !== 0) {
         return;
       }
@@ -48,7 +48,7 @@ export const userDatabaseStore = defineStore("database", {
       this.loadingDoc = true;
       try {
         const q = query(
-          collection(db, "urls"),
+          collection(db, "notes"),
           where("user", "==", auth.currentUser.uid)
         );
         const querySnapshot = await getDocs(q);
@@ -65,7 +65,7 @@ export const userDatabaseStore = defineStore("database", {
         this.loadingDoc = false;
       }
     },
-    async addUrl(name) {
+    async addNote(name) {
       this.loading = true;
       try {
         const objetoDoc = {
@@ -73,7 +73,7 @@ export const userDatabaseStore = defineStore("database", {
           short: nanoid(6),
           user: auth.currentUser.uid,
         };
-        await setDoc(doc(db, "urls", objetoDoc.short), objetoDoc);
+        await setDoc(doc(db, "notes", objetoDoc.short), objetoDoc);
         this.documents.push({
           ...objetoDoc,
           id: objetoDoc.short,
@@ -85,10 +85,10 @@ export const userDatabaseStore = defineStore("database", {
         this.loading = false;
       }
     },
-    async leerUrl(id) {
+    async leerNote(id) {
       this.loadingDoc = true;
       try {
-        const docRef = doc(db, "urls", id);
+        const docRef = doc(db, "notes", id);
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) {
@@ -106,10 +106,10 @@ export const userDatabaseStore = defineStore("database", {
         this.loadingDoc = false;
       }
     },
-    async updateUrl(id, name) {
+    async updateNote(id, name) {
       this.loading = true;
       try {
-        const docRef = doc(db, "urls", id);
+        const docRef = doc(db, "note", id);
 
         const docSnap = await getDoc(docRef);
 
@@ -136,10 +136,10 @@ export const userDatabaseStore = defineStore("database", {
         this.loading = false;
       }
     },
-    async deleteUrl(id) {
+    async deleteNote(id) {
       this.loadingDoc = true;
       try {
-        const docRef = doc(db, "urls", id);
+        const docRef = doc(db, "note", id);
 
         const docSnap = await getDoc(docRef);
 

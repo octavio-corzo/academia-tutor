@@ -1,28 +1,37 @@
 <template>
   <a-layout class="layout">
 
-    <a-layout>
-      <!-- <SlideBar v-if="!userStore.loadingSession"></SlideBar> -->
-      <a-layout-header class="" v-if="!userStore.loadingSession">
-        <div class="logo" />
-        <a-menu theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }" v-model:selectedKeys="selectedKeys">
 
-          <a-menu-item v-if="userStore.userData" key="perfil">
-            <router-link to="/Profile">Profile</router-link>
-          </a-menu-item>
+    <!-- <SlideBar v-if="!userStore.loadingSession"></SlideBar> -->
+    <a-layout-header class="" v-if="!userStore.loadingSession">
+      <div class="logo" />
+      <a-menu theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }" v-model:selectedKeys="selectedKeys">
 
-        </a-menu>
-      </a-layout-header>
-      <a-layout-content class="mt-5" style="padding: 0 50px">
-        <div class="container">
-          <LoadingComponent v-if="userStore.loadingUser" />
-          <router-view v-else></router-view>
-        </div>
-      </a-layout-content>
-      <a-layout-footer class="layout-footer">
+        <a-menu-item v-if="userStore.userData" key="dashboard">
+          <router-link to="/dashboard">Dashboard</router-link>
+        </a-menu-item>
 
-      </a-layout-footer>
-    </a-layout>
+        <a-menu-item v-if="userStore.userData" key="perfil">
+          <router-link to="/Profile">Profile</router-link>
+        </a-menu-item>
+
+
+        <a-menu-item @click="userStore.logoutUser" v-if="userStore.userData" key="logout">
+          Logout
+        </a-menu-item>
+
+      </a-menu>
+    </a-layout-header>
+    <a-layout-content class="mt-5" style="padding: 0 50px">
+      <div class="container">
+        <LoadingComponent v-if="userStore.loadingUser" />
+        <router-view v-else></router-view>
+      </div>
+    </a-layout-content>
+    <a-layout-footer class="layout-footer">
+
+    </a-layout-footer>
+
   </a-layout>
 </template>
 
