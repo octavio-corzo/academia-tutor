@@ -7,6 +7,7 @@ import Login from "./pages/Login/LoginView.vue";
 import ProfileView from "./pages/Profile/ProfileView.vue";
 import LoadingComponent from "./components/Loading/LoadingComponent.vue";
 import NotesView from "./pages/Notes/NotesView.vue";
+import ChatBotView from "./pages/Bot/ChatBotView.vue";
 
 const requireAuth = async (to, from, next) => {
   const userStore = useUserStore();
@@ -57,6 +58,12 @@ const routes = [
     path: "/notes",
     component: NotesView,
     name: "notes",
+    beforeEnter: requireAuth,
+  },
+  {
+    path: "/assistant",
+    component: ChatBotView,
+    name: "assistant",
     beforeEnter: requireAuth,
   },
 ];
