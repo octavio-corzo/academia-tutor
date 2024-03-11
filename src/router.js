@@ -5,9 +5,9 @@ import { userDatabaseStore } from "./store/database";
 import DashBoard from "./pages/Dashboard/DashBoard.vue";
 import Login from "./pages/Login/LoginView.vue";
 import ProfileView from "./pages/Profile/ProfileView.vue";
-import LoadingComponent from "./components/Loading/LoadingComponent.vue";
 import NotesView from "./pages/Notes/NotesView.vue";
 import ChatBotView from "./pages/Bot/ChatBotView.vue";
+import RegisterView from "./pages/Register/RegisterView.vue";
 
 const requireAuth = async (to, from, next) => {
   const userStore = useUserStore();
@@ -41,13 +41,13 @@ const redireccion = async (to, from, next) => {
 
 const routes = [
   {
-    path: "/dashboard",
+    path: "/",
     component: DashBoard,
-    // beforeEnter: requireAuth,
     name: "dashboard",
     beforeEnter: requireAuth,
   },
   { path: "/login", component: Login, name: "login" },
+  { path: "/register", component: RegisterView, name: "register" },
   {
     path: "/profile",
     component: ProfileView,

@@ -28,7 +28,7 @@ export const useUserStore = defineStore("userStore", {
           password
         );
         this.userData = { email: user.email, uid: user.uid };
-        router.push("/dashboard");
+        router.push("/");
       } catch (error) {
         console.log(error.code);
         return error.code;
@@ -83,7 +83,7 @@ export const useUserStore = defineStore("userStore", {
           password
         );
         this.setUser(user);
-        router.push("/dashboard");
+        router.push("/");
       } catch (error) {
         console.log(error.code);
         return error.code;

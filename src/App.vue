@@ -6,20 +6,21 @@
     <a-layout-header class="" v-if="!userStore.loadingSession">
       <div class="logo" />
       <a-menu theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }" v-model:selectedKeys="selectedKeys">
-
         <a-menu-item v-if="userStore.userData" key="dashboard">
-          <router-link to="/dashboard">Dashboard</router-link>
+          <router-link to="/">Dashboard</router-link>
         </a-menu-item>
-
         <a-menu-item v-if="userStore.userData" key="perfil">
           <router-link to="/Profile">Profile</router-link>
         </a-menu-item>
-
-
+        <a-menu-item v-if="!userStore.userData" key="login">
+          <router-link to="/login">Login</router-link>
+        </a-menu-item>
+        <a-menu-item v-if="!userStore.userData" key="register">
+          <router-link to="/register">Register</router-link>
+        </a-menu-item>
         <a-menu-item @click="userStore.logoutUser" v-if="userStore.userData" key="logout">
           Logout
         </a-menu-item>
-
       </a-menu>
     </a-layout-header>
     <a-layout-content class="mt-5" style="padding: 0 50px">

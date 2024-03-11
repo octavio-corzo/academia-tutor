@@ -1,14 +1,14 @@
 <template>
     <div class="chat-container">
         <div class="messages">
-            <div v-for="(item, index) in conversacion" :key="index" class="message">
-                <div class="message-user mb-10">Tú: {{ item.pregunta }}</div>
-                <div class="message-bot mt-10">EduMentor: {{ item.respuesta }}</div>
+            <div v-for="(item, index) in conversation" :key="index" class="message">
+                <div class="message-user mb-10">Tú: {{ item.question }}</div>
+                <div class="message-bot mt-10">EduMentor: {{ item.response }}</div>
             </div>
         </div>
-        <form @submit.prevent="enviarPregunta" class="chat-form">
-            <input v-model="pregunta" class="chat-input" placeholder="Escribe tu pregunta aquí..." />
-            <button type="submit" class="chat-send">Enviar</button>
+        <form @submit.prevent="sendQuestion" class="chat-form">
+            <input v-model="question" class="chat-input" placeholder="Escribe tu question aquí..." />
+            <button type="submit" class="chat-send">send</button>
         </form>
     </div>
 </template>
@@ -17,14 +17,15 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import axios from 'axios';
+import { API_KEY } from '../../globalVars';
 
-const pregunta = ref('');
-const conversacion = reactive([]);
+const question = ref('');
+const conversation = reactive([]);
 
-const enviarPregunta = async () => {
+const sendQuestion = async () => {
     const payload = {
         model: "gpt-3.5-turbo-instruct",
-        prompt: pregunta.value,
+        prompt: question.value,
         temperature: 0.5,
         max_tokens: 2048,
         top_p: 1.0,
@@ -33,20 +34,20 @@ const enviarPregunta = async () => {
     };
 
     try {
-        const respuesta = await axios.post('https://api.openai.com/v1/completions', payload, {
+        const response = await axios.post('https://api.openai.com/v1/completions', payload, {
             headers: {
-                'Authorization': `Bearer`
+                'Authorization': `Bearer ${API_KEY}`
             }
         });
 
-        conversacion.push({
-            pregunta: pregunta.value,
-            respuesta: respuesta.data.choices[0].text.trim(),
+        conversation.push({
+            question: question.value,
+            response: response.data.choices[0].text.trim(),
         });
 
-        pregunta.value = ''; // Limpiar el campo de pregunta después de enviar
+        question.value = '';
     } catch (error) {
-        console.error('Error al enviar pregunta:', error);
+        console.error('Error al enviar question:', error);
     }
 };
 </script>
