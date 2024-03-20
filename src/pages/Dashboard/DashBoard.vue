@@ -47,6 +47,16 @@
 <script setup>
 import * as LucideVueNext from 'lucide-vue-next';
 import router from '../../router';
+
+import { getMessaging, getToken } from "firebase/messaging";
+
+const messaging = getMessaging();
+// Add the public key generated from the console here.
+getToken(messaging, { vapidKey: "BAnj2dy6Bpu7mD1AIkjE_GFsGYI3zstK389GJTduJ_cucRwYzvWkIp4VTtw9OTbktHHi5LMXIbbG7OA85_vMj9Y" });
+
+
+
+
 </script>
 
 <style>

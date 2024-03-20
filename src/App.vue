@@ -1,8 +1,5 @@
 <template>
   <a-layout class="layout">
-
-
-    <!-- <SlideBar v-if="!userStore.loadingSession"></SlideBar> -->
     <a-layout-header class="" v-if="!userStore.loadingSession">
       <div class="logo" />
       <a-menu theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }" v-model:selectedKeys="selectedKeys">

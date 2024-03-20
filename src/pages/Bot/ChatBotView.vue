@@ -6,6 +6,8 @@
                 <div class="message-bot mt-10">EduMentor: {{ item.response }}</div>
             </div>
         </div>
+        <a-spin v-if="loading" class="loading" tip="Cargando respuesta..."></a-spin>
+
         <form @submit.prevent="sendQuestion" class="chat-form">
             <input v-model="question" class="chat-input" placeholder="Escribe tu question aquí..." />
             <button type="submit" class="chat-send">send</button>
@@ -22,34 +24,45 @@ import { API_KEY } from '../../globalVars';
 const question = ref('');
 const conversation = reactive([]);
 
+const loading = ref(false);
+
+
 const sendQuestion = async () => {
+    loading.value = true;
     const payload = {
-        model: "gpt-3.5-turbo-instruct",
-        prompt: question.value,
-        temperature: 0.5,
-        max_tokens: 2048,
+        model: "gpt-4-turbo-preview",
+        messages: [{ role: "user", content: question.value }],
+        temperature: 0.7,
+        max_tokens: 150,
         top_p: 1.0,
         frequency_penalty: 0.0,
         presence_penalty: 0.0,
     };
 
     try {
-        const response = await axios.post('https://api.openai.com/v1/completions', payload, {
+        const response = await axios.post('https://api.openai.com/v1/chat/completions', payload, {
             headers: {
                 'Authorization': `Bearer ${API_KEY}`
             }
         });
 
+
+        const { content } = response.data.choices[0].message;
+
         conversation.push({
             question: question.value,
-            response: response.data.choices[0].text.trim(),
+            response: content.trim(),
         });
 
         question.value = '';
     } catch (error) {
-        console.error('Error al enviar question:', error);
+        console.error('Error al enviar pregunta:', error);
+    } finally {
+        loading.value = false;
     }
 };
+
+
 </script>
 
 <style>
