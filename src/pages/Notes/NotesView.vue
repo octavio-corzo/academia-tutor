@@ -21,9 +21,7 @@ import NotesListComponent from '../../components/Notes/NotesListComponent.vue';
 const userStore = useUserStore();
 const databaseStore = userDatabaseStore();
 
-const handleSubmit = (newNote) => {
-    // Lógica para manejar la adición de una nueva nota
-};
+
 </script>
 
 <style scoped>

@@ -8,7 +8,7 @@ const router = useRouter();
 
 const confirm = (id) => {
     console.log(id);
-    databaseStore.deleteNote(id); // Cambiado de deleteUrl a deleteNote
+    databaseStore.deleteNote(id);
     message.success("Eliminado");
 };
 

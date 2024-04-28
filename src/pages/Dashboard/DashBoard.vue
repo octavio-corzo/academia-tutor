@@ -13,10 +13,11 @@
             </a-card>
         </a-col>
         <a-col class="gutter-row" :span="6">
-            <a-card class="ml-3 mr-3 mb-3 mt-3" :bordered="false" hoverable @click="router.push('/dashboard')">
+            <a-card class="ml-3 mr-3 mb-3 mt-3" :bordered="false" hoverable @click="router.push('/quiz')">
                 <div style="text-align: center;">
-                    <LucideVueNext.Book color="orange" :size="75" />
-                    <a-typography-title :level="4" class="mt-2" style="text-align: center;">Libros</a-typography-title>
+                    <LucideVueNext.BookText color="orange" :size="75" />
+                    <a-typography-title :level="4" class="mt-2" style="text-align: center;">Quiz de
+                        ubicación</a-typography-title>
                 </div>
 
             </a-card>

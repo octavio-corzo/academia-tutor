@@ -8,6 +8,8 @@ import ProfileView from "./pages/Profile/ProfileView.vue";
 import NotesView from "./pages/Notes/NotesView.vue";
 import ChatBotView from "./pages/Bot/ChatBotView.vue";
 import RegisterView from "./pages/Register/RegisterView.vue";
+import QuizPage from "./pages/Quiz/QuizPage.vue";
+import TutorPage from "./pages/Tutor/TutorPage.vue";
 
 const requireAuth = async (to, from, next) => {
   const userStore = useUserStore();
@@ -64,6 +66,18 @@ const routes = [
     path: "/assistant",
     component: ChatBotView,
     name: "assistant",
+    beforeEnter: requireAuth,
+  },
+  {
+    path: "/quiz",
+    component: QuizPage,
+    name: "quiz",
+    beforeEnter: requireAuth,
+  },
+  {
+    path: "/tutor",
+    component: TutorPage,
+    name: "tutor",
     beforeEnter: requireAuth,
   },
 ];

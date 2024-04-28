@@ -22,24 +22,6 @@ export const userDatabaseStore = defineStore("database", {
     loading: false,
   }),
   actions: {
-    // async getNote(id) {
-    //   this.loadingDoc = true;
-    //   try {
-    //     const docRef = doc(db, "note", id);
-    //     const docSnap = await getDoc(docRef);
-
-    //     if (!docSnap.exists()) {
-    //       return false;
-    //     }
-
-    //     return docSnap.data().name;
-    //   } catch (error) {
-    //     console.log(error.mesaage);
-    //     return false;
-    //   } finally {
-    //     this.loadingDoc = false;
-    //   }
-    // },
     async getNotes() {
       if (this.documents.length !== 0) {
         return;

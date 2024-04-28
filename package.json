@@ -11,14 +11,16 @@
   "dependencies": {
     "ant-design-vue": "^4.1.2",
     "axios": "^1.6.7",
+    "file-saver": "^2.0.5",
     "firebase": "^10.8.1",
+    "fs": "^0.0.1-security",
     "lucide-vue-next": "^0.344.0",
     "nanoid": "^5.0.6",
     "pinia": "^2.1.7",
     "unplugin-vue-components": "^0.26.0",
     "vue": "^3.4.19",
     "vue-router": "^4.3.0",
-    "vuetify": "^3.5.11"
+    "vuetify": "^3.5.17"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
