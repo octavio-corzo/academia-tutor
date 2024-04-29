@@ -28,17 +28,49 @@
         </v-row>
 
         <div class="chat-box mt-5">
-            <a-spin v-if="loading" class="loading" tip="Cargando respuesta..."></a-spin>
+            <!-- <a-spin v-if="loading" class="loading" tip="Cargando respuesta..."></a-spin> -->
             <div class="chat-message" v-for="(msg, index) in conversation" :key="index">
                 <div class="message-user mt-5">Tú: {{ msg.question }}</div>
                 <div class="message-bot mt-5">EduMentor: {{ msg.response }}</div>
             </div>
             <!-- Botón que se muestra después de recibir la primera respuesta -->
-            <v-btn v-if="conversation.length > 0" @click="handleAdditionalQuestion(currentTopic)"
+            <v-btn v-if="conversation.length > 0 && stage === 1 || 7" @click="handleAdditionalQuestion(currentTopic)"
                 class="follow-up-button">
-                Más sobre {{ currentTopic }}
+                Más información sobre {{ currentTopic }}
             </v-btn>
+            <v-btn v-if="conversation.length > 0 && stage === 2 || 8" @click="handleAdditionalQuestion(currentTopic)"
+                class="follow-up-button">
+                Ejemplos sobre {{ currentTopic }}
+            </v-btn>
+            <v-btn v-if="conversation.length > 0 && stage === 3 || 9" @click="handleAdditionalQuestion(currentTopic)"
+                class="follow-up-button">
+                Casos de uso {{ currentTopic }}
+            </v-btn>
+            <v-btn v-if="conversation.length > 0 && stage === 4 || 10" @click="handleAdditionalQuestion(currentTopic)"
+                class="follow-up-button">
+                ¿Qué más puedo hacer con {{ currentTopic }}?
+            </v-btn>
+            <v-btn v-if="conversation.length > 0 && stage === 5 || 11" @click="handleAdditionalQuestion(currentTopic)"
+                class="follow-up-button">
+                Ejercios para practicar {{ currentTopic }}
+            </v-btn>
+
+            <div v-if="conversation.length > 0 && stage === 6 || 12" class="image-text-wrapper mt-5">
+                <img src="../../assets/images/eduMentor.jpg" style="height: 250px;" alt="">
+                <div class="animated-text mt-5">
+                    <p class="animated-text-content">
+                        Muy bien, {{ userStore.userData?.displayName }}, espero que la tutoría haya sido de ayuda y
+                        hayas podido aprender más sobre {{ currentTopic }}.
+                    </p>
+                    <p class="animated-text-content mt-5 mb-5">
+                        Presiona otro tema que necesites reforzar para continuar con la tutoría.
+                    </p>
+                </div>
+            </div>
+            <a-spin v-if="loading" class="loading mt-5" tip="Cargando respuesta..."></a-spin>
+
         </div>
+
     </div>
 </template>
 
@@ -61,19 +93,21 @@ const loading = ref(false);
 
 const currentTopic = ref('');
 
+const stage = ref(0);
+
 const sendQuestion = async (topic, additionalText = '') => {
     loading.value = true;
     currentTopic.value = topic;
     let fullQuestion = `Necesito ayuda con el tema de ${topic}. ¿Podrías explicarme más sobre esto?`;
     if (additionalText) {
-        fullQuestion = additionalText; // Cambia la pregunta si se proporciona texto adicional
+        fullQuestion = additionalText;
     }
 
     const payload = {
         model: "gpt-4-turbo-preview",
         messages: [{ role: "user", content: fullQuestion }],
         temperature: 0.7,
-        max_tokens: 150,
+        max_tokens: 300,
         top_p: 1.0,
         frequency_penalty: 0.0,
         presence_penalty: 0.0,
@@ -90,6 +124,7 @@ const sendQuestion = async (topic, additionalText = '') => {
             question: fullQuestion,
             response: content.trim(),
         });
+        stage.value = (stage.value + 1) % 7;
     } catch (error) {
         console.error('Error al enviar pregunta:', error);
     } finally {
@@ -98,8 +133,18 @@ const sendQuestion = async (topic, additionalText = '') => {
 };
 
 const handleAdditionalQuestion = () => {
-    const additionalText = `Ahora neceito que me des 10 ejemplos sobre: ${currentTopic.value}`;
+    let additionalText = `Profundiza más sobre el tema de: ${currentTopic.value}`;
+
     console.log(`Pidiendo más información sobre el tema: ${currentTopic.value}`);
+    if (stage.value === 3) {
+        additionalText = `Ahora que tengo una idea básica sobre ${currentTopic.value}, ¿podrías darme 3 ejemplos?`;
+    } else if (stage.value === 3) {
+        additionalText = `¿En que casos de uso se utilizan ${currentTopic.value}?`;
+    } else if (stage.value === 4) {
+        additionalText = `¿Qué más puedo hacer con ${currentTopic.value}?`;
+    } else if (stage.value === 5) {
+        additionalText = `Dame 3 ejercicios de ${currentTopic.value} para practicar, por favor.`;
+    }
     sendQuestion(currentTopic.value, additionalText);
 }
 </script>
