@@ -5,6 +5,7 @@ export const useQuestionsStore = defineStore("questionsStore", {
   state: () => ({
     loading: false,
     questions: [],
+    incorrectQuestions: [],
   }),
   actions: {
     async getQuestions() {
@@ -21,6 +22,9 @@ export const useQuestionsStore = defineStore("questionsStore", {
       } finally {
         this.loading = false;
       }
+    },
+    setIncorrectQuestions(questions) {
+      this.incorrectQuestions = questions;
     },
   },
 });

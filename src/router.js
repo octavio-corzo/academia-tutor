@@ -77,6 +77,7 @@ const routes = [
   {
     path: "/tutor",
     component: TutorPage,
+    props: (route) => ({ incorrectQuestions: route.params.incorrectQuestions }),
     name: "tutor",
     beforeEnter: requireAuth,
   },

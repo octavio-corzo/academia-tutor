@@ -73,30 +73,40 @@
         </v-card> -->
         <div>
             <transition-group name="results-transition">
-                <v-card v-if="allQuestionsAnswered" class="text-center" transition="fade">
+                <v-card v-if="allQuestionsAnswered" class="result-card text-center" transition="fade">
                     <v-card-item class="text-center">
-                        <v-card-title>Resultados</v-card-title>
+                        <v-card-title class="result-title">Resultados del Quiz</v-card-title>
                     </v-card-item>
-                    <p v-if="questionsStore.questions.length > 0">
-                        Preguntas correctas: {{ correctCount }}
-                    </p>
-                    <p v-if="questionsStore.questions.length > 0">
-                        Preguntas incorrectas: {{ incorrectCount }}
-                    </p>
-                    <v-text-card v-if="questionsStore.questions.length > 0">
-                        Tu nota: {{ calculateScore() }}/10
-                    </v-text-card>
+                    <v-card-text>
+                        <p v-if="questionsStore.questions.length > 0" class="result-text">
+                            <LucideVueNext.Check color="#82E0AA" :size="25" />
+                            Preguntas correctas: <strong>{{ correctCount }}</strong>
+                        </p>
+                        <p v-if="questionsStore.questions.length > 0" class="result-text">
+                            <LucideVueNext.X color="#EC7063" :size="25" />
+                            Preguntas incorrectas: <strong>{{ incorrectCount }}</strong>
+                        </p>
+                        <p v-if="questionsStore.questions.length > 0" class="score-text">
+                            Tu nota: <strong>{{ calculateScore() }}/10</strong>
+                        </p>
+                    </v-card-text>
 
-                    <v-list-item v-for="question in getIncorrectQuestions" :key="question.id">
-                        <v-list-item-content>
-                            <v-list-item-title>
-                                <span style="color: red;">
-                                    Respondiste incorrectamente a: {{ question.topic }}
-                                </span>
-                            </v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
+                    <v-card-text class="incorrect-questions">
+                        <v-list dense>
+                            <v-list-item v-for="question in getIncorrectQuestions" :key="question.id">
+                                <v-list-item-content>
+                                    <v-list-item-title class="incorrect-item">
+                                        <v-icon small color="red">mdi-alert-circle</v-icon>
+                                        Respondiste incorrectamente a: {{ question.topic }}
+                                    </v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list>
+                    </v-card-text>
                 </v-card>
+
+                <a-divider></a-divider>
+                <TutorPage v-if="allQuestionsAnswered" :incorrectQuestions="getIncorrectQuestions" />
             </transition-group>
         </div>
     </div>
@@ -107,6 +117,9 @@ import { computed, ref, watch } from 'vue';
 import { useQuestionsStore } from '../../store/questions';
 import { useUserStore } from '../../store/user';
 import { saveAs } from 'file-saver'; // Import FileSaver.js
+import TutorPage from '../Tutor/TutorPage.vue';
+import router from '../../router';
+import * as LucideVueNext from 'lucide-vue-next';
 
 const userStore = useUserStore();
 
@@ -117,9 +130,6 @@ questionsStore.getQuestions();
 
 let correctCount = ref(0);
 let incorrectCount = ref(0);
-
-
-
 
 const checkAnswer = (questionId, selectedOption) => {
     const question = questionsStore.questions.find(item => item.id === questionId);
@@ -146,15 +156,6 @@ const allQuestionsAnswered = computed(() => {
     return questionsStore.questions.every(question => question.answered);
 });
 
-// const getIncorrectQuestions = computed(() => {
-//     return questionsStore.questions.filter(question => question.incorrectAnswer);
-// });
-// const saveIncorrectQuestions = (data) => {
-//     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-//     const filename = 'incorrect_questions.json';
-//     saveAs(blob, filename);
-//     console.log('Incorrect questions saved successfully!');
-// };
 
 const getIncorrectQuestions = computed(() => {
     const incorrect = questionsStore.questions.filter(question => question.incorrectAnswer);
@@ -162,6 +163,9 @@ const getIncorrectQuestions = computed(() => {
     return incorrect;
 });
 
+const goToTutorPage = () => {
+    router.push({ name: 'TutorPage', params: { incorrectQuestions: getIncorrectQuestions.value } });
+}
 
 watch([correctCount, incorrectCount], () => {
     console.log('Actualizando puntuación...');
@@ -171,6 +175,44 @@ watch([correctCount, incorrectCount], () => {
 </script>
 
 <style scoped>
+.result-card {
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.result-title {
+    color: #424242;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.result-text,
+.score-text {
+    font-size: 18px;
+    color: #333;
+    margin: 10px 0;
+}
+
+.incorrect-questions {
+    margin-top: 20px;
+    background-color: #fff3f3;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.incorrect-item {
+    color: #d32f2f;
+    font-size: 16px;
+}
+
+.v-icon {
+    margin-right: 10px;
+}
+
+
+
 .image-text-wrapper {
     display: flex;
     /* Allow stacking image and text */
