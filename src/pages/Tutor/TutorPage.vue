@@ -33,6 +33,11 @@
                 <div class="message-user mt-5">Tú: {{ msg.question }}</div>
                 <div class="message-bot mt-5">EduMentor: {{ msg.response }}</div>
             </div>
+            <!-- Botón que se muestra después de recibir la primera respuesta -->
+            <v-btn v-if="conversation.length > 0" @click="handleAdditionalQuestion(currentTopic)"
+                class="follow-up-button">
+                Más sobre {{ currentTopic }}
+            </v-btn>
         </div>
     </div>
 </template>
@@ -54,9 +59,15 @@ const conversation = ref([]);
 
 const loading = ref(false);
 
-const sendQuestion = async (topic) => {
+const currentTopic = ref('');
+
+const sendQuestion = async (topic, additionalText = '') => {
     loading.value = true;
-    const fullQuestion = `Necesito ayuda con el tema de ${topic}. ¿Podrías explicarme más sobre esto?`;
+    currentTopic.value = topic;
+    let fullQuestion = `Necesito ayuda con el tema de ${topic}. ¿Podrías explicarme más sobre esto?`;
+    if (additionalText) {
+        fullQuestion = additionalText; // Cambia la pregunta si se proporciona texto adicional
+    }
 
     const payload = {
         model: "gpt-4-turbo-preview",
@@ -79,16 +90,36 @@ const sendQuestion = async (topic) => {
             question: fullQuestion,
             response: content.trim(),
         });
-        console.log(response.data.choices[0].message.content.trim());
     } catch (error) {
         console.error('Error al enviar pregunta:', error);
     } finally {
         loading.value = false;
     }
 };
+
+const handleAdditionalQuestion = () => {
+    const additionalText = `Ahora neceito que me des 10 ejemplos sobre: ${currentTopic.value}`;
+    console.log(`Pidiendo más información sobre el tema: ${currentTopic.value}`);
+    sendQuestion(currentTopic.value, additionalText);
+}
 </script>
 
 <style scoped>
+.follow-up-button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #00b30f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.follow-up-button:hover {
+    background-color: #65b300;
+}
+
 .button-wrapper {
     display: flex;
     justify-content: center;
